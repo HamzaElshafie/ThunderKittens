@@ -20,6 +20,14 @@ using bf16 = __nv_bfloat16;
  * @brief Half-precision floating-point type.
  */
 using half = __half;
+/**
+ * @brief 8-bit signed integer type.
+ */
+using int8 = signed char;
+/**
+ * @brief 8-bit unsigned integer type.
+ */
+using uint8 = unsigned char;
 
 /**
  * @brief Packed word of two bfloat16 floating-point values.
@@ -29,6 +37,17 @@ using bf16_2 = __nv_bfloat162;
  * @brief Packed word of two half-precision floating-point values.
  */
 using half_2 = __half2;
+
+/**
+ * @brief Packed 8-bit signed integer types.
+ */
+using int8_2 = char2;
+using int8_4 = char4;
+/**
+ * @brief Packed 8-bit unsigned integer types.
+ */
+using uint8_2 = uchar2;
+using uint8_4 = uchar4;
 
 #if defined(KITTENS_HOPPER) || defined(KITTENS_BLACKWELL)
 /**
