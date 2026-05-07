@@ -77,7 +77,7 @@ __device__ static inline constexpr uint32_t instruction_descriptor() {
         } else {
             static_assert(sizeof(AB) == 999, "Invalid AB type.");
         }
-        static_assert(!neg, "Negation is not supported for integer matrix multiplies.")
+        static_assert(!neg, "Negation is not supported for integer matrix multiplies.");
         desc |= 0b0       << 13; // Don't negate A matrix
         desc |= 0b0       << 14; // Don't negate B matrix
         if constexpr (trans_a) {
