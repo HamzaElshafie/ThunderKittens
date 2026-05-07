@@ -315,6 +315,12 @@ template<int _height, int _width, bool _swizzle=true, int _swizzle_bytes=0>
 using st_hf = st<half,  _height, _width, _swizzle, _swizzle_bytes>;
 template<int _height, int _width, bool _swizzle=true, int _swizzle_bytes=0> 
 using st_fl = st<float, _height, _width, _swizzle, _swizzle_bytes>;
+template<int _height, int _width, bool _swizzle=true, int _swizzle_bytes=0> 
+using st_int8 = st<int8, _height, _width, _swizzle, _swizzle_bytes>;
+template<int _height, int _width, bool _swizzle=true, int _swizzle_bytes=0> 
+using st_uint8 = st<uint8, _height, _width, _swizzle, _swizzle_bytes>;
+template<int _height, int _width, bool _swizzle=true, int _swizzle_bytes=0> 
+using st_int = st<int, _height, _width, _swizzle, _swizzle_bytes>;
 #if defined(KITTENS_HOPPER) || defined(KITTENS_BLACKWELL)
 template<int _height, int _width, bool _swizzle=true, int _swizzle_bytes=0> 
 using st_fp8e4m3 = st<fp8e4m3, _height, _width, _swizzle, _swizzle_bytes>;

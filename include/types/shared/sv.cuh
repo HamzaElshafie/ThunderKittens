@@ -118,6 +118,9 @@ template<typename SV> constexpr int sv_tma_dim2 = (SV::length / sv_tma_dim1<SV>)
 template<size_t _length> using sv_bf = sv<bf16,  _length>;
 template<size_t _length> using sv_hf = sv<half,  _length>;
 template<size_t _length> using sv_fl = sv<float, _length>;
+template<size_t _length> using sv_int8 = sv<int8, _length>;
+template<size_t _length> using sv_uint8 = sv<uint8, _length>;
+template<size_t _length> using sv_int = sv<int, _length>;
 #if defined(KITTENS_HOPPER) || defined(KITTENS_BLACKWELL)
 template<int _length> using sv_fp8e4m3 = sv<fp8e4m3, _length>;
 template<int _length> using sv_fp8e5m2 = sv<fp8e5m2, _length>;
