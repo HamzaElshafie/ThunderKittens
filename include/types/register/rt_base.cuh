@@ -62,7 +62,8 @@ template<typename _T, ducks::rt_layout::all _layout> struct rt_base {
     );
 #else
     static_assert(
-        std::is_same_v<dtype, bf16_2> || std::is_same_v<dtype, float2> || std::is_same_v<dtype, half_2>,
+        std::is_same_v<dtype, bf16_2> || std::is_same_v<dtype, float2> || std::is_same_v<dtype, half_2> ||
+        std::is_same_v<dtype, int8_4> || std::is_same_v<dtype, uint8_4> || std::is_same_v<dtype, int2>,
         "rt_base was provided an unsupported type."
     );
 #endif
