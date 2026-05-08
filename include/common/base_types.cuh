@@ -104,8 +104,8 @@ template<typename T>
 concept T2 = std::is_same_v<T, float2>     || 
              std::is_same_v<T, bf16_2>     || 
              std::is_same_v<T, half_2>     || 
-             std::is_same_v<T, int8_2>     || 
-             std::is_same_v<T, uint8_2>    || 
+             std::is_same_v<T, int8_4>     ||
+             std::is_same_v<T, uint8_4>    ||
              std::is_same_v<T, int2>       || 
              std::is_same_v<T, fp8e4m3_4>  || 
              std::is_same_v<T, fp8e5m2_4>  || 
@@ -127,8 +127,8 @@ template<typename T>
 concept T2 = std::is_same_v<T, float2>     || 
              std::is_same_v<T, bf16_2>     || 
              std::is_same_v<T, half_2>     || 
-             std::is_same_v<T, int8_2>     || 
-             std::is_same_v<T, uint8_2>    || 
+             std::is_same_v<T, int8_4>     ||
+             std::is_same_v<T, uint8_4>    ||
              std::is_same_v<T, int2>       ||
              std::is_same_v<T, fp8e4m3_4>  || 
              std::is_same_v<T, fp8e5m2_4>;
@@ -146,8 +146,8 @@ template<typename T>
 concept T2 = std::is_same_v<T, float2>     || 
              std::is_same_v<T, bf16_2>     || 
              std::is_same_v<T, half_2>     || 
-             std::is_same_v<T, int8_2>     || 
-             std::is_same_v<T, uint8_2>    || 
+             std::is_same_v<T, int8_4>     ||
+             std::is_same_v<T, uint8_4>    ||
              std::is_same_v<T, int2>;
 template<typename T>
 concept T1 = std::is_same_v<T, float>      || 
@@ -377,32 +377,32 @@ template<> struct packing<bool_2> {
 template<> struct packing<char> {
     static __device__ inline constexpr int num() { return 1; }
     using unpacked_type = char; // for compatibility
-    using packed_type = int8_2;
-    static __device__ inline constexpr int8_2 pack(const char &i) { return int8_2{i, i}; } // this replication makes code cleaner later.
+    using packed_type = int8_4;
+    static __device__ inline constexpr int8_4 pack(const char &i) { return int8_4{i, i, i, i}; } // this replication makes code cleaner later.
 };
 template<> struct packing<int8> {
     static __device__ inline constexpr int num() { return 1; }
     using unpacked_type = int8;
-    using packed_type = int8_2;
-    static __device__ inline constexpr int8_2 pack(const int8 &i) { return int8_2{i, i}; } // this replication makes code cleaner later.
+    using packed_type = int8_4;
+    static __device__ inline constexpr int8_4 pack(const int8 &i) { return int8_4{i, i, i, i}; } // this replication makes code cleaner later.
 };
-template<> struct packing<int8_2> {
-    static __device__ inline constexpr int num() { return 2; }
+template<> struct packing<int8_4> {
+    static __device__ inline constexpr int num() { return 4; }
     using unpacked_type = int8;
-    using packed_type = int8_2;
-    static __device__ inline constexpr int8_2 pack(const int8 &i) { return int8_2{i, i}; } // this replication makes code cleaner later.
+    using packed_type = int8_4;
+    static __device__ inline constexpr int8_4 pack(const int8 &i) { return int8_4{i, i, i, i}; } // this replication makes code cleaner later.
 };
 template<> struct packing<uint8> {
     static __device__ inline constexpr int num() { return 1; }
     using unpacked_type = uint8;
-    using packed_type = uint8_2;
-    static __device__ inline constexpr uint8_2 pack(const uint8 &i) { return uint8_2{i, i}; } // this replication makes code cleaner later.
+    using packed_type = uint8_4;
+    static __device__ inline constexpr uint8_4 pack(const uint8 &i) { return uint8_4{i, i, i, i}; } // this replication makes code cleaner later.
 };
-template<> struct packing<uint8_2> {
-    static __device__ inline constexpr int num() { return 2; }
+template<> struct packing<uint8_4> {
+    static __device__ inline constexpr int num() { return 4; }
     using unpacked_type = uint8;
-    using packed_type = uint8_2;
-    static __device__ inline constexpr uint8_2 pack(const uint8 &i) { return uint8_2{i, i}; } // this replication makes code cleaner later.
+    using packed_type = uint8_4;
+    static __device__ inline constexpr uint8_4 pack(const uint8 &i) { return uint8_4{i, i, i, i}; } // this replication makes code cleaner later.
 };
 template<> struct packing<short> {
     static __device__ inline constexpr int num() { return 1; }
