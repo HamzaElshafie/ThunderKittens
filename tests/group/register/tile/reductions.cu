@@ -90,6 +90,50 @@ struct broadcast_col {
         kittens::warp::store(output, reg_tile, {});
     }
 };
+struct max_broadcast_row {
+    template<int H, int W, int NW, kittens::ducks::rt_layout::all L> using valid = std::bool_constant<NW == 1 && W*H<=64>; // this is warp-level
+    static inline const std::string test_identifier = "reg_max_broadcast_row";
+    template<int H, int W, int NW, gl_t GLT, kittens::ducks::rt_layout::all L> __host__ static void host_func(const std::vector<float> &i_ref, std::vector<float> &o_ref) {
+        for(int i = 0; i < H*16; i++) {
+            float row_max = i_ref[i*W*16];
+            for(int j = 1; j < W*16; j++) {
+                float val = i_ref[i*W*16+j];
+                row_max = val > row_max ? val : row_max;
+            }
+            for(int j = 0; j < W*16; j++) o_ref[i*W*16+j] = row_max;
+        }
+    }
+    template<int H, int W, int NW, gl_t GLT, kittens::ducks::rt_layout::all L> __device__ static void device_func(const GLT &input, const GLT &output) {
+        kittens::rt_fl<16*H, 16*W, L> reg_tile;
+        kittens::warp::load(reg_tile, input, {});
+        typename kittens::rt_fl<16*H, 16*W, L>::col_vec accum;
+        kittens::warp::row_max(accum, reg_tile);
+        kittens::warp::broadcast_row(reg_tile, accum);
+        kittens::warp::store(output, reg_tile, {});
+    }
+};
+struct max_broadcast_col {
+    template<int H, int W, int NW, kittens::ducks::rt_layout::all L> using valid = std::bool_constant<NW == 1 && W*H<=64>; // this is warp-level
+    static inline const std::string test_identifier = "reg_max_broadcast_col";
+    template<int H, int W, int NW, gl_t GLT, kittens::ducks::rt_layout::all L> __host__ static void host_func(const std::vector<float> &i_ref, std::vector<float> &o_ref) {
+        for(int i = 0; i < W*16; i++) {
+            float col_max = i_ref[i];
+            for(int j = 1; j < H*16; j++) {
+                float val = i_ref[i+j*W*16];
+                col_max = val > col_max ? val : col_max;
+            }
+            for(int j = 0; j < H*16; j++) o_ref[i+j*W*16] = col_max;
+        }
+    }
+    template<int H, int W, int NW, gl_t GLT, kittens::ducks::rt_layout::all L> __device__ static void device_func(const GLT &input, const GLT &output) {
+        kittens::rt_fl<16*H, 16*W, L> reg_tile;
+        kittens::warp::load(reg_tile, input, {});
+        typename kittens::rt_fl<16*H, 16*W, L>::row_vec accum;
+        kittens::warp::col_max(accum, reg_tile);
+        kittens::warp::broadcast_col(reg_tile, accum);
+        kittens::warp::store(output, reg_tile, {});
+    }
+};
 
 void group::reg::tile::reductions::tests(test_data &results) {
     std::cout << " ----- Starting ops/group/register/tile/reductions tests! -----\n" << std::endl;
@@ -105,6 +149,10 @@ void group::reg::tile::reductions::tests(test_data &results) {
     sweep_size_2d_warp<broadcast_row, SIZE, SIZE, kittens::ducks::rt_layout::col>::run(results);
     sweep_size_2d_warp<broadcast_col, SIZE, SIZE, kittens::ducks::rt_layout::row>::run(results);
     sweep_size_2d_warp<broadcast_col, SIZE, SIZE, kittens::ducks::rt_layout::col>::run(results);
+    sweep_size_2d_warp<max_broadcast_row, SIZE, SIZE, kittens::ducks::rt_layout::row>::run(results);
+    sweep_size_2d_warp<max_broadcast_row, SIZE, SIZE, kittens::ducks::rt_layout::col>::run(results);
+    sweep_size_2d_warp<max_broadcast_col, SIZE, SIZE, kittens::ducks::rt_layout::row>::run(results);
+    sweep_size_2d_warp<max_broadcast_col, SIZE, SIZE, kittens::ducks::rt_layout::col>::run(results);
     std::cout << std::endl;
 }
 
